@@ -7,6 +7,6 @@ namespace LibraryAPI.Core.Repository
 {
     public interface IUnitOfWork
     {
-        Task CompleteAsync();
+        void Complete();
     }
 }

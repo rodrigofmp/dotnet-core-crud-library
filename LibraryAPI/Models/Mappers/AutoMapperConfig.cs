@@ -13,6 +13,7 @@ namespace LibraryAPI.Models.Mappers
             Mapper.Initialize(x =>
             {
                 x.AddProfile<DomainToResourceMappingProfile>();
+                x.AddProfile<ResourceToDomainMappingProfile>();
             });
         }
     }

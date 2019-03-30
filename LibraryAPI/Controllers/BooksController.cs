@@ -39,24 +39,70 @@ namespace LibraryAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult Get(int id)
         {
-            return "value";
+            var book = _repository.GetBook(id);
+
+            if (book == null)
+                return NotFound();
+
+            var resource = _mapper.Map<Book, BookResource>(book);
+
+            return Ok(resource);
         }
 
         [HttpPost]
-        public void Post([FromBody]string value)
+        public IActionResult Post([FromBody] SaveBookResource form)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var model = _mapper.Map<SaveBookResource, Book>(form);
+
+            _repository.Add(model);
+            _unitOfWork.Complete();
+
+            var book = _repository.GetBook(model.Id);
+
+            var result = _mapper.Map<Book, BookResource>(book);
+
+            return Ok(result);
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public IActionResult Put(int id, [FromBody] SaveBookResource form)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var model = _repository.GetBook(id);
+
+            if (model == null)
+                return NotFound();
+
+            _mapper.Map<SaveBookResource, Book>(form, model);
+
+            _unitOfWork.Complete();
+
+            var book = _repository.GetBook(model.Id);
+
+            var result = _mapper.Map<Book, BookResource>(book);
+
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+            var book = _repository.GetBook(id);
+
+            if (book == null)
+                return NotFound();
+
+            _repository.Remove(book);
+            _unitOfWork.Complete();
+
+            return Ok(id);
         }
     }
 }

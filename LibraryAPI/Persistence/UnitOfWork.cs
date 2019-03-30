@@ -15,9 +15,9 @@ namespace LibraryAPI.Persistence
             this.context = context;
         }
 
-        public async Task CompleteAsync()
+        public void Complete()
         {
-            await context.SaveChangesAsync();
+            context.SaveChanges();
         }
     }
 }
