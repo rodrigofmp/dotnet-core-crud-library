@@ -27,6 +27,8 @@ namespace LibraryAPI
             services.AddScoped<IBookRepository, BookRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+            services.AddCors();
+
             services.AddMvc();
             services.AddAutoMapper();
         }
@@ -38,6 +40,13 @@ namespace LibraryAPI
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors(
+                options => options
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+            );
 
             app.UseMvc();
         }
